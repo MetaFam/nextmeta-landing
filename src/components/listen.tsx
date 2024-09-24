@@ -6,15 +6,8 @@ export default function Listen() {
   const { isPending, error, data } = useQuery({
     queryKey: ["pods"],
     queryFn: () => (
-      fetch('https://pods.media/api/rss/feed/channel/nextmeta', {
-        method: "GET",
-        mode: "no-cors",
-      })
-      .then((res) => {
-        console.debug({res})
-        return parse(res.body)
-      })  
-
+      fetch('https://pods-proxy.netlify.app/api/pods-rss/nextmeta')
+      .then((res) => res.json())
     ),
   })
   console.debug({data})
