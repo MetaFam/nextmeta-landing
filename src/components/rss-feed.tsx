@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import clsx from 'clsx'
 
 type RSSItem = {
   id: string
@@ -6,13 +7,17 @@ type RSSItem = {
   description: string
   link: string
   published: number
+  itunes_image: { href: string }
   enclosures: Array<{
     url: string
     type: string
   }>
 }
 
-export default function RSSFeed({ url }: { url: string }) {
+export default function RSSFeed(
+  { url, selected = false, id, blackout = false }:
+  { url: string, selected?: boolean, id: string, blackout?: boolean }
+) {
 
   const { isPending, error, data } = useQuery({
     queryKey: [`pods-${url}`],
@@ -22,13 +27,17 @@ export default function RSSFeed({ url }: { url: string }) {
   })
 
   return (
-    <section id="listen" className="card bg-base-100 shadow-xl">
+    <section className="collapse sm:collapse-arrow md:collapse-open ">
+    <input id={`${id}-open`} type="radio" name="accordion" defaultChecked={selected} />
+    <div {...{ id }} className="collapse-title card bg-base-100 shadow-xl">
       <figure>
         <img
           src="/assets/nextmeta-logo.webp"
           alt="NextMeta"
-          className="w-full" />
+          className="w-full rounded-lg" />
       </figure>
+    </div>
+    <div className="collapse-content">
       {isPending ? (
         <div className="loading loading-spinner loading-lg mx-auto pt-16"></div>
       ) : (
@@ -53,19 +62,19 @@ export default function RSSFeed({ url }: { url: string }) {
               {data.items.map((item: RSSItem) => {
                 const image = item.enclosures.find((enc) => (
                   enc.type.startsWith('image/')
-                ))
+                )) ?? item.itunes_image
                 const audio = item.enclosures.find((enc) => (
                   enc.type.startsWith('audio/')
                 ))
                 return (
-                  <li className="w-[34ch] md:w-[44ch] flex flex-col justify-center min-h-52 mt-4 bg-contain bg-no-repeat bg-center" key={item.id} id={item.id}>
-                  <div className="relative cursor-pointer blackout">
+                  <li className="w-[34ch] md:w-[44ch] flex flex-col justify-center min-h-52 mt-4 bg-contain bg-no-repeat bg-center" key={item.id}>
+                  <div className={clsx('relative cursor-pointer', blackout && 'blackout')}>
                       {image && (
                         <a href={item.link} target="_blank" className="hover:underline">
-                        <img className="rounded-lg absolute max-h-64" src={image?.url} alt="image description"/>
+                        <img className={clsx('rounded-lg max-h-64 block mx-auto')} src={'href' in image ? image?.href: image?.url} alt={item.title}/>
                         </a>
                       )}
-                    <div className="flex flex-col justify-center content min-h-52 px-4 text-lg text-white bottom-6">
+                    <div className={clsx('flex flex-col justify-center content min-h-52 px-6 pt-2 text-lg text-white bottom-6', image && blackout &&  'pointer-events-none')}>
                     <a href={item.link} target="_blank" className="hover:underline">
                       <h2 className="font-bold text-neutral-content">{item.title}</h2>
                     </a>
@@ -79,7 +88,7 @@ export default function RSSFeed({ url }: { url: string }) {
                     </div>
                     </div>
                     {audio && (
-                      <audio controls className="w-full md:w-[calc(100% - 4ch)] mx-auto mt-4 h-6">
+                      <audio controls className="w-[calc(100% - 4ch)] mx-auto mt-4 h-6">
                         <source src={audio.url} type={audio.type}/>
                       </audio>
                     )}
@@ -91,6 +100,7 @@ export default function RSSFeed({ url }: { url: string }) {
           </div>
         )
       )}
+    </div>
     </section>
   )
 }

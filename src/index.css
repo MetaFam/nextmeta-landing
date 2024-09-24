@@ -7,6 +7,7 @@
   transition: opacity 0.3s ease-in-out;
   left: 50%;
   transform: translateX(-50%);
+  position: absolute;
 }
 .blackout:hover img {
   opacity: 1;
@@ -21,4 +22,6 @@
 .blackout .content {
   transition: opacity 0.3s ease-in-out;
 }
-
+audio {
+  width: calc(100% - 4ch);
+}
