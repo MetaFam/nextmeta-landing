@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.blackout img {
+  opacity: 0.25;
+  transition: opacity 0.3s ease-in-out;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.blackout:hover img {
+  opacity: 1;
+  
+}
+.blackout:has(img) .content {
+  background-color: #0007;
+}
+.blackout:has(img):hover .content {
+  opacity: 0;
+}
+.blackout .content {
+  transition: opacity 0.3s ease-in-out;
+}
+
