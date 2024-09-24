@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import clsx from 'clsx'
+import { ReactNode } from 'react'
 
 type RSSItem = {
   id: string
@@ -15,8 +16,14 @@ type RSSItem = {
 }
 
 export default function RSSFeed(
-  { url, selected = false, id, blackout = false }:
-  { url: string, selected?: boolean, id: string, blackout?: boolean }
+  { url, selected = false, id, blackout = false, header }:
+  {
+    url: string
+    selected?: boolean
+    id: string
+    blackout?: boolean
+    header?: ReactNode 
+  }
 ) {
 
   const { isPending, error, data } = useQuery({
@@ -58,6 +65,7 @@ export default function RSSFeed(
           </div>  
         ) : (
           <div>
+            {header}
             <ol className="card-actions justify-end">
               {data.items.map((item: RSSItem) => {
                 const image = item.enclosures.find((enc) => (

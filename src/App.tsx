@@ -31,7 +31,7 @@ function App() {
           </li>
         </ul>
       </nav>
-      <RSSFeed selected={true} id="listen" url="https://rss-proxy.netlify.app/api/pods-rss/nextmeta"/>
+      <RSSFeed selected={true} id="listen" url="https://rss-proxy.netlify.app/api/pods-rss/nextmeta" header={<p className="pt-4 font-medium">Click below to collect as mintable NFTs on <a className="text-neutral-content" target="_blank" href="https://pods.media/nextmeta">pods.media</a>!</p>}/>
       <RSSFeed blackout={true} id="read" url="https://rss-proxy.netlify.app/api/substack-rss/metagame"/>
       <Watch/>
     </main>
