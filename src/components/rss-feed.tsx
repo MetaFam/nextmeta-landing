@@ -35,7 +35,7 @@ export default function RSSFeed(
   })
 
   return (
-    <section className="collapse sm:collapse-arrow md:collapse-open ">
+    <section className="collapse max-lg:collapse-arrow md:collapse-open ">
     <input id={`${id}-open`} type="radio" name="accordion" defaultChecked={selected} />
     <div {...{ id }} className="collapse-title card bg-base-100 shadow-xl">
       <figure>
