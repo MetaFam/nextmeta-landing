@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+// import Markdown from 'react-markdown'
 
 export default function Listen() {
 
@@ -9,6 +10,7 @@ export default function Listen() {
       .then((res) => res.json())
     ),
   })
+
   console.debug({data})
   return (
     <section id="listen" className="card bg-base-100 shadow-xl">
@@ -18,13 +20,29 @@ export default function Listen() {
           alt="NextMeta"
           className="w-full" />
       </figure>
-      <div className="card-body">
-        <h2 className="card-title">NextMeta</h2>
-        <p>NextMeta is a podcast and a newsletter about onchain economies, coordination and the bigger picture.</p>
-        <div className="card-actions justify-end">
-          <button className="btn btn-primary">Collect/Listen</button>
+      {isPending ? (
+        <div className="loading loading-spinner loading-lg mx-auto pt-16"></div>
+      ) : (
+        <div className="card-body">
+          <h2 className="card-title">Podcasts</h2>
+          <p>NextMeta is a podcast and a newsletter about onchain economies, coordination and the bigger picture.</p>
+          <ol className="card-actions justify-end">
+            {data.items.map((item) => (
+              <li className="mt-4" key={item.id}>
+                <a href={item.link} className="hover:underline">
+                  <h2 className="font-bold">{item.title}</h2>
+                </a>
+                <h3 className="font-medium">{new Date(item.published).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}</h3>
+                <p className="text-justify line-clamp-5 text-ellipsis max-w-[28ch] whitespace-pre-line md:max-w-[38ch] mt-2">{item.description}</p>
+                <audio controls className="w-[28ch] md:w-[38ch] mt-4 h-6">
+                  <source src={item.enclosures[0].url} type={item.enclosures[0].type}/>
+                </audio>
+                <hr className="mt-2 w-3/4 mx-auto"/>
+              </li>
+            ))}
+          </ol>
         </div>
-      </div>
+      )}
     </section>
   )
 }

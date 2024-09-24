@@ -13,10 +13,12 @@ export default {
     themes: [
       {
         light: {
+
           "primary": "#00afaa",
-          "secondary": "#d30000",
-          "accent": "#00fb00",
+          "secondary": "#9391E1",
+          "accent": "#000",
           "neutral": "#292929",
+          "neutral-content": "#17B59B",
           "base-100": "#e5ffff",
           "info": "#00a4e0",
           "success": "#00bb96",
@@ -27,9 +29,10 @@ export default {
         dark: {
 
           "primary": "#d400ff",
-          "secondary": "#008aff",
+          "secondary": "#6d6bcc",
           "accent": "#ffffff",
           "neutral": "#14110d",
+          "neutral-content": "#5adec8",
           "base-100": "#1d282f",
           "info": "#35a0ff",
           "success": "#9be500",

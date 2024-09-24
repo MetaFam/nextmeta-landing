@@ -8,7 +8,7 @@ function App() {
   return (
     <>
     <header>
-      <h1 className="font-bold text-4xl mb-4">NextMeta Media</h1>
+      <h1 className="font-bold text-4xl mb-4 text-neutral-content">NextMeta Media</h1>
       <nav>
         <ul className="list-style-none flex justify-center gap-2">
           <li>
