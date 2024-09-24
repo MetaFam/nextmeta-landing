@@ -1,6 +1,4 @@
 import './App.css'
-import Listen from './components/listen'
-import Read from './components/read'
 import Watch from './components/watch'
 import RSSFeed from './components/rss-feed'
 
