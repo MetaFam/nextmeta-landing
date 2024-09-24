@@ -2,7 +2,7 @@ export default function Read() {
     
     return (
     
-    <div className="card bg-base-100 shadow-xl">
+    <section id="read" className="card bg-base-100 shadow-xl">
       <figure>
         <img
           src="/assets/nextmeta-logo.webp"
@@ -17,6 +17,6 @@ export default function Read() {
           <button className="btn btn-primary">Read Newsletter</button>
         </div>
       </div>
-    </div>
+    </section>
     )
     }

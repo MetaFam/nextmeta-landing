@@ -2,7 +2,7 @@ export default function Watch() {
     
     return (
     
-    <div className="card bg-base-100 shadow-xl">
+    <section id="watch" className="card bg-base-100 shadow-xl">
       <figure>
         <img
           src="/assets/nextmeta-logo.webp"
@@ -17,6 +17,6 @@ export default function Watch() {
           <button className="btn btn-primary">Watch</button>
         </div>
       </div>
-    </div>
+    </section>
     )
     }

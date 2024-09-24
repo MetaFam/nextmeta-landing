@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { parse } from 'rss-to-json'
 
 export default function Listen() {
 
@@ -12,7 +11,7 @@ export default function Listen() {
   })
   console.debug({data})
   return (
-    <div className="card bg-base-100 shadow-xl">
+    <section id="listen" className="card bg-base-100 shadow-xl">
       <figure>
         <img
           src="/assets/nextmeta-logo.webp"
@@ -26,6 +25,6 @@ export default function Listen() {
           <button className="btn btn-primary">Collect/Listen</button>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

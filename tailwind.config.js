@@ -23,11 +23,12 @@ export default {
           "warning": "#ffb600",
           "error": "#ff6294",
         },
+        
         dark: {
 
           "primary": "#d400ff",
           "secondary": "#008aff",
-          "accent": "#0065ff",
+          "accent": "#ffffff",
           "neutral": "#14110d",
           "base-100": "#1d282f",
           "info": "#35a0ff",
