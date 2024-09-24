@@ -1,7 +1,7 @@
 
 import { useInfiniteQuery } from '@tanstack/react-query'
-import Error from './error'
-import { useCallback, useState } from 'react';
+import ErrorMessage from './error'
+import { useRef } from 'react';
 
 interface Video {
   id: string;
@@ -24,8 +24,9 @@ export default function Watch() {
     maxResults: 10,
     fields: 'nextPageToken,items(id,snippet(title,resourceId/videoId))',
   }
+  if (!params.key) throw new Error('Must specify VITE_YOUTUBE_API_KEY.')
+
   const nextPageToken = useRef()
-  // if (!apiKey) throw new Error('Must specify VITE_YOUTUBE_API_KEY.')
 
   const args = Object.entries(params).map(
     ([key, val]) => (`${key}=${val}`)
@@ -33,19 +34,19 @@ export default function Watch() {
   const url = `https://youtube.googleapis.com/youtube/v3/playlistItems?${args}`
   
   const fetchProjects = async ({ pageParam }: { pageParam: string }) => {
-    let toGet = ${url}&pageToken=${pageParam}
-    
+    let toGet = `${url}&pageToken=${pageParam}`
+
     console.debug({ toGet })
-    
+
     const res = await fetch(toGet)
     const raw = await res.json()
-    setNextPageToken(raw.nextPageToken)
-    
+    nextPageToken.current = raw.nextPageToken
+
     console.log({ raw })
-    
+
     return (
       raw?.items.map((
-        { id, snippet: { title, resourceId: } videoId } }:
+        { id, snippet: { title, resourceId: { videoId } } }:
         GoogleApiYouTubePlaylistItemResource
       ) => ({ id, videoId, title })) ?? []
     )
@@ -64,7 +65,7 @@ export default function Watch() {
   })
 
   console.log({ videos })
-  
+
   return (
     <section className="collapse max-lg:collapse-arrow md:collapse-open">
       <input id="watch-open" type="radio" name="accordion"/>
@@ -81,11 +82,10 @@ export default function Watch() {
           <div className="loading loading-spinner loading-lg mx-auto pt-16"></div>
         ) : (
           error ? (
-            <Error message={error.message}/>
+            <ErrorMessage message={error.message}/>
           ) : (
               <ol>
-                <li><button onClick={() => fetchNextPage()}>Next</button></li>
-                {videos[0].map(({ id, title, videoId }: Video) => {
+                {videos.flat().map(({ id, title, videoId }: Video) => {
                   const src = `https://www.youtube.com/embed/${videoId}`;
                   return (
                     <li
@@ -96,6 +96,14 @@ export default function Watch() {
                     </li>
                   )
                 })}
+                <li>
+                  <button
+                    onClick={() => fetchNextPage()}
+                    className="btn btn-primary"
+                  >
+                    More
+                  </button>
+                </li>
               </ol>
           )
         )}
