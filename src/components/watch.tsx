@@ -84,27 +84,27 @@ export default function Watch() {
           error ? (
             <ErrorMessage message={error.message}/>
           ) : (
-              <ol>
-                {videos.flat().map(({ id, title, videoId }: Video) => {
-                  const src = `https://www.youtube.com/embed/${videoId}`;
-                  return (
-                    <li
-                      className="aspect-video rounded-md overflow-hidden mt-4"
-                      key={id}
-                    >
-                      <iframe {...{ title, src }}  allowFullScreen/>
-                    </li>
-                  )
-                })}
-                <li>
-                  <button
-                    onClick={() => fetchNextPage()}
-                    className="btn btn-primary"
+            <ol>
+              {videos.flat().map(({ id, title, videoId }: Video) => {
+                const src = `https://www.youtube.com/embed/${videoId}`;
+                return (
+                  <li
+                    className="aspect-video rounded-md overflow-hidden mt-4"
+                    key={id}
                   >
-                    More
-                  </button>
-                </li>
-              </ol>
+                    <iframe {...{ title, src }}  allowFullScreen/>
+                  </li>
+                )
+              })}
+              <li>
+                <button
+                  onClick={() => fetchNextPage()}
+                  className="btn btn-primary"
+                >
+                  More
+                </button>
+              </li>
+            </ol>
           )
         )}
       </div>
