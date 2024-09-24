@@ -16,35 +16,41 @@ export type FetchResponse = {
   };
 };
 
-
-function Watch() {
-  const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY
-  const playlistId = 'UU6gdZ6Q7Fwfvn-Uu4QKDyhg'
-  const limit = 10
-  const [nextPageToken, setNextPageToken] = useState('')
+export default function Watch() {
+  const params = {
+    part: 'snippet',
+    key: import.meta.env.VITE_YOUTUBE_API_KEY,
+    playlistId: 'UU6gdZ6Q7Fwfvn-Uu4QKDyhg',
+    maxResults: 10,
+    fields: 'nextPageToken,items(id,snippet(title,resourceId/videoId))',
+  }
+  const nextPageToken = useRef()
   // if (!apiKey) throw new Error('Must specify VITE_YOUTUBE_API_KEY.')
 
-  const url = `https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=${limit}&playlistId=${playlistId}&key=${apiKey}`
-
+  const args = Object.entries(params).map(
+    ([key, val]) => (`${key}=${val}`)
+  ).join('&')
+  const url = `https://youtube.googleapis.com/youtube/v3/playlistItems?${args}`
   
   const fetchProjects = async ({ pageParam }: { pageParam: string }) => {
-    console.log({pageParam})
-    const res = await fetch(`${url}&pageToken=${pageParam}`)
+    let toGet = ${url}&pageToken=${pageParam}
+    
+    console.debug({ toGet })
+    
+    const res = await fetch(toGet)
     const raw = await res.json()
     setNextPageToken(raw.nextPageToken)
-    console.log({raw})
+    
+    console.log({ raw })
+    
     return (
-      raw?.items.map((video: GoogleApiYouTubePlaylistItemResource) => ({
-        id: video.id,
-        videoId: video.snippet.resourceId.videoId,
-        title: video.snippet.title,
-      })) ?? []
+      raw?.items.map((
+        { id, snippet: { title, resourceId: } videoId } }:
+        GoogleApiYouTubePlaylistItemResource
+      ) => ({ id, videoId, title })) ?? []
     )
   }
-  const getNextPageParam = useCallback(
-    () => {console.log({nextPageToken}); return nextPageToken},
-    [nextPageToken],
-  )
+
   const {
     data: { pages: videos = [] } = {},
     error,
@@ -54,9 +60,11 @@ function Watch() {
     queryKey: ['projects'],
     queryFn: fetchProjects,
     initialPageParam: '',
-    getNextPageParam,
+    getNextPageParam: () => (nextPageToken.current),
   })
-  console.log({videos})
+
+  console.log({ videos })
+  
   return (
     <section className="collapse max-lg:collapse-arrow md:collapse-open">
       <input id="watch-open" type="radio" name="accordion"/>
@@ -76,20 +84,15 @@ function Watch() {
             <Error message={error.message}/>
           ) : (
               <ol>
-                <li><button onClick={() => {console.log('hi'); fetchNextPage()}}>Next</button>
-                </li>
-                {videos[0].map((video: Video) => {
-                  const url = `https://www.youtube.com/embed/${video?.videoId}`;
+                <li><button onClick={() => fetchNextPage()}>Next</button></li>
+                {videos[0].map(({ id, title, videoId }: Video) => {
+                  const src = `https://www.youtube.com/embed/${videoId}`;
                   return (
                     <li
                       className="aspect-video rounded-md overflow-hidden mt-4"
-                      key={video.id}
+                      key={id}
                     >
-                      <iframe
-                        title={video?.title}
-                        src={url}
-                        allowFullScreen
-                      />
+                      <iframe {...{ title, src }}  allowFullScreen/>
                     </li>
                   )
                 })}
@@ -100,5 +103,3 @@ function Watch() {
     </section>
   )
 }
-
-export default Watch
