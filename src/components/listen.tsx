@@ -59,7 +59,12 @@ export default function Listen() {
                   <a href={item.link} className="hover:underline">
                     <h2 className="font-bold">{item.title}</h2>
                   </a>
-                  <h3 className="font-medium">{new Date(item.published).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}</h3>
+                  {/* when publish date is missing, rss library uses current time */}
+                  {new Date().getTime() - item.published > 60_000 &&  (
+                    <h3 className="font-medium">
+                      {new Date(item.published).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+                    </h3>
+                  )}
                   <p className="text-justify line-clamp-5 text-ellipsis max-w-[28ch] whitespace-pre-line md:max-w-[38ch] mt-2">{item.description}</p>
                   <audio controls className="w-[28ch] md:w-[38ch] mt-4 h-6">
                     <source src={item.enclosures[0].url} type={item.enclosures[0].type}/>
